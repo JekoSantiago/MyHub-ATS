@@ -45,4 +45,23 @@ class OptionsController extends Controller
 
         echo $output;
     }
+
+    public function getPRF(Request $request)
+    {
+
+        $param = [
+            $request->segment(2),
+            $request->segment(3)
+        ];
+
+        $data = Common::getPRF($param);
+
+        $output = '<option></option>';
+        foreach($data as $prf) :
+            $output .= '<option value="'. $prf->Record_ID .'">'. $prf->ControllNumber .'</option>';
+        endforeach;
+
+        echo $output;
+
+    }
 }

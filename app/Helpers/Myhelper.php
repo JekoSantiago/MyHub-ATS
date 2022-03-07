@@ -403,8 +403,12 @@ class Myhelper
                     endif;
                 endif;
             else :
+                if (count($data) > 1) :
+                    $text = $data[1]->Recommendation;
+                else:
+                    $text = 'No ratings';
+                endif;
                 $bool = FALSE;
-                $text = 'No ratings';
                 $icon = 'mdi-checkbox-intermediate text-warning';
             endif;
         endif;
@@ -429,33 +433,33 @@ class Myhelper
 
         if( $count > 0) :
             if($data[0]->InitialPassed == 1) :
-                $text = 'Passed';
+                $text = 'Initial Passed';
                 $status = 1;
                 $icon = 'mdi-checkbox-marked-outline text-success';
                 if($data[0]->SecondPassed != null) :
                     if($data[0]->SecondPassed == 1) :
-                        $text = 'Passed';
+                        $text = 'Second Passed';
                         $status = 1;
                         $icon = 'mdi-checkbox-marked-outline text-success';
                         if($data[0]->FinalPassed != null) :
                             if($data[0]->FinalPassed == 1) :
-                                $text = 'Passed';
+                                $text = 'Final Passed';
                                 $status = 1;
                                 $icon = 'mdi-checkbox-marked-outline text-success';
                             else :
-                                $text = 'Failed';
+                                $text = 'Final Failed';
                                 $status = 0;
                                 $icon = 'mdi-close-box-outline text-danger';
                             endif;
                         endif;
                     else :
-                        $text = 'Failed';
+                        $text = 'Second Failed';
                         $status = 0;
                         $icon = 'mdi-close-box-outline text-danger';
                     endif;
                 endif;
             else:
-                $text = 'Failed';
+                $text = 'Initial Failed';
                 $status = 0;
                 $icon = 'mdi-close-box-outline text-danger';
             endif;
@@ -547,7 +551,7 @@ class Myhelper
                 if( $sss != ''         && $philhealth != '' && $hdmf != ''     && $tin != ''       &&
                     $superiorID != ''  && $medDate != ''    && $clinicID != '' && $physician != '' &&
                     $medResultID != '' && $companyID != ''  && $locID != ''    && $hireDate != ''  &&
-                    $payType != ''     && $payModeID != ''  && $basic != '' ) :
+                    $payType != ''     && $payModeID != ''  && $basic != '') :
 
                     $visible = TRUE;
                 else :
@@ -644,6 +648,31 @@ class Myhelper
 
         return $medicon;
     }
+
+    public static function AFHIcon($AFHDate)
+    {
+        $afhicon = 'mdi-checkbox-blank-outline';
+
+        if($AFHDate != NULL)
+        {
+            $afhicon = 'mdi-checkbox-marked-outline text-success';
+        }
+
+        return $afhicon;
+    }
+
+    public static function reqIcon($req)
+    {
+        $reqicon = 'mdi-checkbox-blank-outline';
+
+        if($req == 1)
+        {
+            $reqicon = 'mdi-checkbox-marked-outline text-success';
+        }
+
+        return $reqicon;
+    }
+
 
     public static function appStatusIcon($hireStatus_ID)
     {

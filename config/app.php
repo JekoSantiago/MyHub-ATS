@@ -122,7 +122,7 @@ return [
     'site_dev_ass'  => 57,
     'site_dev_sup'  => 58,
     'ass_store_sup' => 65, /* AC */
-    'area_manager'  => 51,
+    'area_manager'  => 56,
     'hum_res_ass'   => 23,
     'ops_plan_cont' => 48,
     'nurse'         => '',

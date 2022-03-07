@@ -688,9 +688,13 @@ class ApplicantController extends Controller
             $request->edit_emp_accno,
             $request->edit_emp_ass_cat,
             $request->edit_emp_dateend,
+            $request->app_afh_date,
+            $request->app_ob_date,
+            $request->edit_emp_PRF
         );
 
         if($request->edit_employmentID != '') :
+            array_push($data, $request->app_emp_status);
             $result = Applicant::updateAppEmployment($data);
         else:
             $result = Applicant::insertAppEmployment($data);

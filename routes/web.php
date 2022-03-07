@@ -77,6 +77,7 @@ Route::post('/get-all-trainings','TrainingController@getSSTrainings');
 Route::post('/get-municipal/{id}','OptionsController@getMunicipal');
 Route::post('/get-barangay/{id}','OptionsController@getBarangay');
 Route::post('/get-seasonal-dates/{date}','OptionsController@getSeasonalDateEnd');
+Route::post('/get-prf/{appID}/{loc}','OptionsController@getPRF');
 
 // Reports
 Route::get('/org-app/show/{id}/{id2}','ReportController@showRPTOriginalAppointment');

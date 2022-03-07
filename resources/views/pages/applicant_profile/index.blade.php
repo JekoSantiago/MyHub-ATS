@@ -57,15 +57,17 @@
         <div class="col-md-3">
             <div class="card-box text-center">
                 <img src="{{asset('assets/images/app_thumbnail.jpg')}}" class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
-                <h4 class="mb-0">{{ $applicant[0]->LastName }}, {{ $applicant[0]->FirstName }} {{ $applicant[0]->MiddleName }}</h4>
+                <h4 class="mb-0" id='appFullname'>{{ $applicant[0]->LastName }}, {{ $applicant[0]->FirstName }} {{ $applicant[0]->MiddleName }}</h4>
                 <p class="text-muted">{{ $applicant[0]->Position }}</p>
                 @if( $applicant[0]->isDeployed == 1 )
                 <div class="mb-2">
                     <span class="badge badge-success">Deployed</span>
                 </div>
                 @endif
-                @if( $applicant[0]->isWithRequirements == 1 && $applicant[0]->isDeployed == 0  && $applicant[0]->EmployeeNo != NULL )
-                <button type="button" id="btn_tag_deploy" data-toggle="tooltip" data-placement="top" title="" data-original-title="Click this button to tag as deployed" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Deploy?</button>
+                @if( $applicant[0]->isWithRequirements == 1 && $applicant[0]->isDeployed == 0  && $applicant[0]->EmployeeNo != NULL && $applicant[0]->EmployeeNo /* && $employment[0]->Record_ID != NULL */ && $employment[0]->OnBoardingDate)
+                    @if(MyHelper::checkPosition($applicant[0]->Position_ID) || (!MyHelper::checkPosition($applicant[0]->Position_ID) && $employment[0]->AFHDate != NULL))
+                    <button type="button" id="btn_tag_deploy" data-toggle="tooltip" data-placement="top" title="" data-original-title="Click this button to tag as deployed" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Deploy?</button>
+                    @endif
                 @endif
                 @if( $applicant[0]->isWithRequirements == 0 && $reqvisible == TRUE)
                 <button type="button" id="btn_tag_complete_req" data-toggle="tooltip" data-placement="top" title="" data-original-title="Click this button to tag as complete requirements" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Complete requirements?</button>
@@ -109,6 +111,16 @@
                                 </td>
 
                             </tr>
+                            @php $reqicon = Myhelper::reqIcon($applicant[0]->isWithRequirements); @endphp
+                            <tr>
+                                <td class="px-0">
+                                    <span><i class="mdi {{ $reqicon }} mdi-24px mdi-set"></i></span>
+                                </td>
+                                <td class="col">
+                                    <div><span>Requirements</span></div>
+                                    <div class="text-muted">{{ $applicant[0]->isWithRequirements == 1 ? 'Complete' : 'Incomplete' }}</div>
+                                </td>
+                            </tr>
                             @php $medicon = Myhelper::medicalResultIcon($employment[0]->ResultType); @endphp
                             <tr>
                                 <td class="px-0">
@@ -127,6 +139,17 @@
                                 <td class="col">
                                     <div><span>Training status</span></div>
                                     <div class="text-muted">{{ $traininginfo['text'] }}</div>
+                                </td>
+                            </tr>
+                            @else
+                            @php $afhicon = Myhelper::AFHIcon($employment[0]->AFHDate); @endphp
+                            <tr>
+                                <td class="px-0">
+                                    <i class="mdi {{ $afhicon }} mdi-24px mdi-set"></i>
+                                </td>
+                                <td class="col">
+                                    <div><span>Approval for Hiring</span></div>
+                                    <div class="text-muted">@if($employment[0]->AFHDate) Approved @else Not yet approved @endif</div>
                                 </td>
                             </tr>
                             @endif

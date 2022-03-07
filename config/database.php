@@ -94,7 +94,7 @@ return [
         'dbATS' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '10.245.12.141'),
+            'host' => env('DB_HOST', '10.13.188.163'),
             'port' => env('DB_PORT', '1433'),
             'database' => env('DB_DATABASE_ATS', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
@@ -107,7 +107,7 @@ return [
         'dbTMS' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '10.245.12.141'),
+            'host' => env('DB_HOST', '10.13.188.163'),
             'port' => env('DB_PORT', '1433'),
             'database' => env('DB_DATABASE_TMS', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
@@ -121,7 +121,7 @@ return [
         'dbRptSession' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '10.245.12.141'),
+            'host' => env('DB_HOST', '10.13.188.163'),
             'port' => env('DB_PORT', '1433'),
             'database' => env('DB_DATABASE_RPT', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
@@ -134,7 +134,7 @@ return [
         'dbUserMgt' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '10.245.12.141'),
+            'host' => env('DB_HOST', '10.13.188.163'),
             'port' => env('DB_PORT', '1433'),
             'database' => env('DB_DATABASE_USER', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),

@@ -231,6 +231,24 @@ class Common extends Model
         $emp = DB::connection('dbATS')->select('EXEC sp_Employee2_Search');
         return $emp;
     }
+
+    public static function getEmployeeStatus()
+    {
+        $empt = DB::connection('dbATS')->select('EXEC sp_EmployeeStatus_Get');
+        return $empt;
+    }
+
+    public static function getPRF($data)
+    {
+        $prf = DB::connection('dbATS')->select('EXEC sp_PRFControl_Get ?,?' , $data);
+        return $prf;
+    }
+
+    public static function getPRFDeployed($data)
+    {
+        $prf = DB::connection('dbATS')->select('EXEC sp_PRFDeployed_Get ?' , $data);
+        return $prf;
+    }
 }
 
 /* End of file Common.php
