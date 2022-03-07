@@ -19,6 +19,9 @@ $(function () {
     $('#edit_philhealth').mask('0000-0000-0000');
     $('#edit_emp_empno').mask('00000000-0');
 
+
+
+
     $('.interview-flatpickr').flatpickr({
         dateFormat: 'Y-m-d'
     });
@@ -2192,37 +2195,92 @@ $(function () {
             allowOutsideClick: false,
             preConfirm: () => {
                 return new Promise(function(resolve, reject) {
-                    $.post(WebURL + '/app-employment/update/deploy', formdata, function (data) {
-                        if (data.num > 0) {
-                            swal.fire({
-                                title: 'Success!',
-                                text: data.msg,
-                                icon: 'success',
-                                confirmButtonText: 'Ok',
-                                confirmButtonColor: '#6658dd',
-                                allowOutsideClick: false,
-                            }).then((result) => {
-                                if (result.value) {
-                                    window.location.reload();
-                                }
+                    var name = $('#appFullname').text()
+                    swal.fire({
+                        title: 'Validation',
+                        html:
+                        '<h4>Kindly re-enter the employee number of ' + name + ' to proceed with deployment</h4>' +
+                        '<input id="swal-input1" class="swal2-input" placeholder="xxxxxxxxx-x" maxlength="10">',
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        onOpen: function(el) {
+                            var container = $(el);
+                            container.find('#swal-input1').mask('00000000-0');
+                            $(document).on("cut copy paste","#swal-input1",function(e) {
+                                e.preventDefault();
                             });
+                        },
+                        preConfirm: () => {
+                            var empNo = $('#edit_emp_empno').val()
+                            var empNoC = $('#swal-input1').val()
+                            if(empNo == empNoC)
+                            {
+                                return new Promise(function(resolve, reject) {
+                                    $.post(WebURL + '/app-employment/update/deploy', formdata, function (data) {
+                                        if (data.num > 0) {
+                                            swal.fire({
+                                                title: 'Success!',
+                                                text: data.msg,
+                                                icon: 'success',
+                                                confirmButtonText: 'Ok',
+                                                confirmButtonColor: '#6658dd',
+                                                allowOutsideClick: false,
+                                            }).then((result) => {
+                                                if (result.value) {
+                                                    window.location.reload();
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            swal.fire({
+                                                    title: "Warning!",
+                                                    text: data.msg,
+                                                    icon: "warning",
+                                                    confirmButtonText: "Ok",
+                                                    confirmButtonColor: '#6658dd',
+                                                    allowOutsideClick: false,
+                                                });
+                                        }
+                                    }, 'JSON');
+                                  });
+                            }
+                            else
+                            {
+                                Swal.fire(
+                                    'Error',
+                                    'Employee number does not match',
+                                    'error'
+                                  )
+                            }
+
                         }
-                        else {
-                            swal.fire({
-                                    title: "Warning!",
-                                    text: data.msg,
-                                    icon: "warning",
-                                    confirmButtonText: "Ok",
-                                    confirmButtonColor: '#6658dd',
-                                    allowOutsideClick: false,
-                                });
-                        }
-                    }, 'JSON');
+                    })
                   });
             }
         })
 
     });
+
+    $('#edit_emp_location').on('change',function(){
+
+        var appID = $('#hidden_AppID').val()
+        var loc = $('#edit_emp_location').val();
+
+        $.ajax({
+            url:WebURL+'/get-prf/'+appID+'/'+loc,
+            type:'POST',
+            dataType: 'text',
+            cache: false,
+            success: function (data) {
+                $('#edit_emp_PRF').html(data);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        })
+    })
+
+
 
 });
 

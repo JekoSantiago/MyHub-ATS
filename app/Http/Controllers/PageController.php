@@ -57,8 +57,9 @@ class PageController extends Controller
         $app_emp       = Applicant::getAppEmployment($id);
         $app_train     = Training::getAppTraining($id);
         $checkTraining = Training::checkTraining($id);
-        // dd($checkTraining);
+        $prfDeployed   = Common::getPRFDeployed([$app_emp[0]->Record_ID]);
 
+        //  dump($app_emp);
         $data['applicant']     = $app;
         $data['appcon']        = $app_con;
         $data['appschool']     = $app_educ;
@@ -87,6 +88,8 @@ class PageController extends Controller
         $data['municipal']     = Common::getMunicipal($app[0]->Province_ID);
         $data['barangay']      = Common::getBarangay($app[0]->Municipal_ID);
         $data['bmunicipal']    = Common::getMunicipal($app[0]->BirthProv_ID);
+        $data['empStatus']     = Common::getEmployeeStatus();
+        $data['prf']           = Common::getPRF([$id,0]);
         $data['seconddisable'] = Myhelper::checkAccessSecondInterview($app_int);
         $data['thirddisable']  = Myhelper::checkAccessThirdInterview($app_int);
         $data['traininginfo']  = Myhelper::checkResult($app[0]->Position_ID, $checkTraining);
@@ -95,6 +98,7 @@ class PageController extends Controller
         $data['othdisable']    = Myhelper::checkEnableEmpOtherInput($app[0]->isWithRequirements);
         $data['reqvisible']    = Myhelper::checkVisibleCompleteReq($app, $app_emp);
         $data['title']         = $app[0]->AppName;
+        $data['prfDep']        = (empty($prfDeployed)) ? NULL : $prfDeployed[0]->ControllNumber;
 
 
         // dd($data['traininginfo']);

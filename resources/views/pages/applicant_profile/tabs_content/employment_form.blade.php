@@ -22,8 +22,8 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="edit_emp_empno">Employee number</label>
-                    <input id="edit_emp_empno" name="edit_emp_empno" type="text" placeholder="xxxxxxxx-x"
-                        class="form-control" maxlength="9" value="{{ $employment[0]->EmployeeNo }}" {{ $empdisable }}>
+                    <input id="edit_emp_empno" name="edit_emp_empno" type="text" placeholder="xxxxxxxxx-x"
+                        class="form-control" maxlength="10" value="{{ $employment[0]->EmployeeNo }}" {{ $empdisable }}>
                     <label class="invalid-feedback" id="edit_emp_empno_error"></label>
                 </div>
             </div>
@@ -102,6 +102,26 @@
                             <option value={{ $sup->Employee_ID }} {{ $select }}>{{ $sup->FullName }}</option>
                         @endforeach
                     </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="edit_emp_PRF">PRF Control Number</label>
+                    @if($employment[0]->isDeployed == 1)
+                    <input id="edit_emp_PRF" name="edit_emp_PRF" type="hidden" class="form-control" value="{{ $employment[0]->Record_ID }}" {{ $empdisable }}>
+                    <input type="text" class="form-control" value="{{ $prfDep }}">
+                    @else
+                    <select id="edit_emp_PRF" name="edit_emp_PRF" class="form-control employment-select2"
+                        data-placeholder="Select PRF">
+                        <option></option>
+                        @foreach ($prf as $pr)
+                        @php
+                        $select = ($employment[0]->Record_ID == $pr->Record_ID ) ? 'selected=selected' : '';
+                        @endphp
+                            <option value={{ $pr->Record_ID }} {{ $select }}>{{ $pr->ControllNumber }}</option>
+                        @endforeach
+                    </select>
+                    @endif
                 </div>
             </div>
         </div>
@@ -249,6 +269,54 @@
                 </div>
             </div>
         </div>
+    </fieldset>
+    <fieldset>
+        <h5 class="mb-3 text-uppercase bg-light p-2">Others</h5>
+        <div class="row">
+            @if(!MyHelper::checkPosition($applicant[0]->Position_ID))
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="app_afh_date">Approved for Hiring Date</label>
+                    <input id="app_afh_date" name="app_afh_date" type="text" class="form-control employment-flatpickr" value="{{ $employment[0]->AFHDate }}"  {{ $empdisable }}>
+                </div>
+            </div>
+            @endif
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="app_ob_date">On-board Date</label>
+                    <input id="app_ob_date" name="app_ob_date" type="text" class="form-control employment-flatpickr" value="{{ $employment[0]->OnBoardingDate }}" {{ $othdisable }}>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="app_emp_status">Employee Status</label>
+                    <select id="app_emp_status" name="app_emp_status" class="form-control employment-select2" data-placeholder="Select Status"  @if($applicant[0]->isDeployed != 1) disabled @endif>
+                    <option></option>
+                    @foreach ( $empStatus as $stats )
+                    @php
+                    $select = ($employment[0]->EmploymentStatus_ID == $stats->EmploymentStatus_ID ) ? 'selected=selected' : '';
+                    @endphp
+                    <option value={{ $stats->EmploymentStatus_ID }} {{ $select }}>{{ $stats->EmploymentStatus }}</option>
+                    @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="app_req_date">Requirements Date Submitted</label>
+                    <input id="app_req_date" name="app_req_date" type="text" class="form-control employment-flatpickr" value="{{ $employment[0]->RequirementsDate }}" disabled>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="app_dep_date">Deployment Date</label>
+                    <input id="app_dep_date" name="app_dep_date" type="text" class="form-control employment-flatpickr" value="{{ $employment[0]->DeployDate }}" disabled>
+                </div>
+            </div>
+        </div>
+
     </fieldset>
     <div class="text-right">
         <button type="button" id="btn_save_employment" class="btn btn-primary mt-2">Save changes</button>

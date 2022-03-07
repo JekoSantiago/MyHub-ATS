@@ -15,9 +15,9 @@ class AuthController extends Controller
         $id     = request()->input('id');
         $empID  = MyHelper::decryptSHA256($id);
         $result = Authentication::getUserDetails($empID);
-        $uRole  = Authentication::userRole($result[0]->Usr_ID);
+        $uRole  = Authentication::userRole($empID);
 
-        // dd($id);
+        // dd($uRole);
 
         Session::put('Usr_ID', base64_encode($result[0]->Usr_ID));
         Session::put('Emp_Id', base64_encode($result[0]->Emp_ID));
