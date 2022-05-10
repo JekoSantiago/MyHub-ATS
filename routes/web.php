@@ -28,7 +28,7 @@ Route::get('/trainings','PageController@trainings');
 Route::get('/maintenance','PageController@maintenance');
 
 //Dashboard -- Data
-Route::get('/count-hiresource','DashboardController@hireSourceCount');
+Route::post('/count-hiresource','DashboardController@hireSourceCount');
 Route::post('/get-usage','DashboardController@getSSHRUsage');
 
 //Modals

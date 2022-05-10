@@ -11,27 +11,27 @@ class Dashboard extends Model
     /**
      * Get hire source count
      */
-    public static function getHireSourceCount()
+    public static function getHireSourceCount($data)
     {
-        $result = DB::connection('dbATS')->select('EXEC [sp_DB_HireSource_Count]');
+        $result = DB::connection('dbATS')->select('EXEC [sp_DB_HireSource_Count] ? ',$data);
         return $result;
     }
 
     /**
      * Get top 5 HR Interview count
      */
-    public static function getHRInterviewCount()
+    public static function getHRInterviewCount($data)
     {
-        $result = DB::connection('dbATS')->select('EXEC [sp_DB_HRInterview_Count]');
+        $result = DB::connection('dbATS')->select('EXEC [sp_DB_HRInterview_Count] ?', $data);
         return $result;
     }
 
     /**
      * Get summary of Total App, Failed App, Encoded App (Current Date), Deployed App
      */
-    public static function getAppTotalDashboard()
+    public static function getAppTotalDashboard($data)
     {
-        $result = DB::connection('dbATS')->select('EXEC [sp_DB_Applicant_Count]');
+        $result = DB::connection('dbATS')->select('EXEC [sp_DB_Applicant_Count] ?', $data);
         return $result;
     }
 
@@ -40,7 +40,7 @@ class Dashboard extends Model
      */
     public static function getRecentEncodedApp()
     {
-        $result = DB::connection('dbATS')->select('EXEC [sp_DB_RecentApp_Get]');
+        $result = DB::connection('dbATS')->select('EXEC [sp_DB_RecentApp_Get]',);
         return $result;
     }
 

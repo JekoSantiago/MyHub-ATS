@@ -2,6 +2,7 @@
 
 @section('css_plugins')
     <link href="{{asset('assets/libs/c3/c3.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css')}}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -20,10 +21,16 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Applicant Tracking System</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li> 
+                        <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
                 </div>
                 <h4 class="page-title">Dashboard</h4>
+                <form id="dateForm" method="get" action="{{ URL::to('/dashboard')}}">
+                <div class="col-2 mb-4">
+                    <label for="yeardate" class="">Year</label>
+                    <input type="text" class="form-control yeardate" id="yeardate" name="yeardate" value="{{ $yeardate }}">
+                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -239,6 +246,8 @@
 @section('js_plugins')
     <script src="{{asset('assets/libs/d3/d3.min.js')}}"></script>
     <script src="{{asset('assets/libs/c3/c3.min.js')}}"></script>
+    <script src="{{asset('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+
 @endsection
 
 @section('js')

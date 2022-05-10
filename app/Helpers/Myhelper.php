@@ -292,6 +292,11 @@ class Myhelper
 
     public static function checkPosition($posID)
     {
+        if($posID == 101)
+        {
+            $posID = 73;
+        };
+
         if($posID == config('app.store_crew')) :
             return TRUE;
         elseif($posID == config('app.shift_leader')) :
@@ -315,6 +320,11 @@ class Myhelper
 
     public static function checkResult($posID, array $data)
     {
+        if($posID == 101)
+        {
+            $posID = 73;
+        };
+
         $parent  = config('app.prog_sc');
         $result  = 0;
         $text    = 'No record';

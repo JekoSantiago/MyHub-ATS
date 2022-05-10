@@ -23,10 +23,14 @@ class PageController extends Controller
         // });
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $data['cardcount'] = Dashboard::getAppTotalDashboard();
-        $data['intcount']  = Dashboard::getHRInterviewCount();
+        $param  =  $request->input('yeardate') ? : date('Y',strtotime('now'));
+
+        $data['yeardate'] = $param;
+
+        $data['cardcount'] = Dashboard::getAppTotalDashboard([$param]);
+        $data['intcount']  = Dashboard::getHRInterviewCount([$param]);
         $data['recapp']    = Dashboard::getRecentEncodedApp();
         $data['title']     = 'Dashboard';
 

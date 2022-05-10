@@ -1,9 +1,28 @@
 $(function () {
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+     });
+
     $('.dashboard-flatpickr').flatpickr({
         mode: 'range',
         dateFormat: 'Y-m-d'
     });
+
+    $(".yeardate").datepicker({
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years",
+        autoclose:true
+    });
+
+    $(".yeardate").change(function() {
+        $("#dateForm").submit();
+      });
+
+
 
     var tblHRUsage = $('#tbl_hr_usage').DataTable({
         autoWidth: true,
@@ -64,15 +83,17 @@ $(function () {
 
     /* Filter usage button */
     $('body').on('click', '#btn_filter_usage', function () {
-        
+
         tblHRUsage.draw();
         // tblHRUsage.ajax.reload();
-    }); 
+    });
 
     var c3Data = $.ajax({
         url: WebURL + '/count-hiresource' ,
-        type: 'GET',
-        cache: false,
+        type: 'post',
+        data:{
+            year:$('#yeardate').val()
+        },
         beforeSend: function () {
             $("#app_source_pie").html('<div class="text-center"><div class="spinner-border avatar-lg text-primary m-2"></div></div>');
         },
@@ -87,24 +108,24 @@ $(function () {
                 count[e.HireSource] = e.Count;
             })
 
-            var colors = [ 
-                "#a32858", 
-                "#fcef8d", 
-                "#0c2e44", 
-                "#47998e", 
-                "#6871d1", 
-                "#963dbf", 
-                "#cc425e", 
-                "#bdf767", 
-                "#6ab2b7", 
-                "#5c46bf", 
-                "#b441cc", 
-                "#f9cd8e", 
-                "#1e6f50", 
-                "#6d9cf9", 
-                "#7d2da0", 
+            var colors = [
+                "#a32858",
+                "#fcef8d",
+                "#0c2e44",
+                "#47998e",
+                "#6871d1",
+                "#963dbf",
+                "#cc425e",
+                "#bdf767",
+                "#6ab2b7",
+                "#5c46bf",
+                "#b441cc",
+                "#f9cd8e",
+                "#1e6f50",
+                "#6d9cf9",
+                "#7d2da0",
                 "#5ac54f"];
-        
+
             c3.generate({
                 bindto: '#app_source_pie',
                 data: {

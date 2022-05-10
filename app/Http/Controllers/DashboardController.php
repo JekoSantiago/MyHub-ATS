@@ -11,14 +11,15 @@ class DashboardController extends Controller
     /**
      * Get JSON hire source count
      */
-    public function hireSourceCount()
+    public function hireSourceCount(Request $request)
     {
-        echo json_encode(Dashboard::getHireSourceCount());
+
+        echo json_encode(Dashboard::getHireSourceCount([$request->year]));
     }
 
     /**
      * Fetch hr usage server side
-     */ 
+     */
     public function getSSHRUsage(Request $request)
     {
         $date  = explode(' to ', $request->daterange);
@@ -33,7 +34,7 @@ class DashboardController extends Controller
             $datefrom = $date[0];
             $dateto   = ( $date[1] ?? $date[0] );
         endif;
-        
+
         $result = Dashboard::getHREmployeeUsage($search, $datefrom, $dateto);
         $count = count($result);
         $encode = array();
@@ -43,7 +44,7 @@ class DashboardController extends Controller
                 $encode[] = array_map('utf8_encode', (array)$items);
             endforeach;
         endif;
-        
+
         echo MyHelper::buildJsonTable($count, $encode);
     }
 }
