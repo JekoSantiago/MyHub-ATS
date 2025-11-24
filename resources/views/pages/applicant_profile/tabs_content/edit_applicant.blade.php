@@ -89,6 +89,58 @@
         </div>
         <div class="form-group">
             <div class="row">
+                <div class="col-md-4">
+                    <label for="edit_nick_name">Nick name</label>
+                    <input id="edit_nick_name" name="edit_nick_name" type="text" class="form-control" value="{{ $applicant[0]->Nickname }}">
+                    <label class="invalid-feedback" id="edit_fname_error">Nick name is required.</label>
+                </div>
+                <div class="col-md-8">
+                    <label for="edit_maiden_name">Mother's Maiden name</label>
+                    <input id="edit_maiden_name" name="edit_maiden_name" type="text" class="form-control" value="{{ $applicant[0]->MotherMaidenName }}">
+                    <label class="invalid-feedback" id="edit_maiden_name">Mother's Maiden name is required.</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="edit_blood">Blood Type</label>
+                    <select id="edit_blood" name="edit_blood" class="form-control edit-app-select2-no-search"
+                        data-placeholder="Select gender">
+                        <option></option>
+                        @foreach ($blood as $b)
+                        @php
+                        $select = ($applicant[0]->BloodType_ID == $b->BloodType_ID ) ? 'selected=selected' : '';
+                        @endphp
+                        <option value={{ $b->BloodType_ID }} {{ $select }}>{{ $b->BloodType }}</option>
+                        @endforeach
+                    </select>
+                    <label class="invalid-feedback" id="edit_blood_error">Blood Type is required.</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="edit_weight">Weight (kg)</label>
+                    <input id="edit_weight" name="edit_weight" type="number" class="form-control" value="{{ $applicant[0]->Weight }}">
+                    <label class="invalid-feedback" id="edit_weight_error">Weight is required.</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="edit_height">Height (ft'in)</label>
+                    <input id="edit_height" name="edit_height" type="text" class="form-control" value="{{ $applicant[0]->Height }}">
+                    <label class="invalid-feedback" id="edit_height_error">Height is required.</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="edit_expat">Expatriate</label>
+                    <select id="edit_expat" name="edit_expat" class="form-control edit-app-select2-no-search"
+                        data-placeholder="">
+                        <option></option>
+                        <option value="1" {{ ($applicant[0]->Expat == 1 ) ? 'selected=selected' : '' }}>Yes</option>
+                        <option value="0" {{ ($applicant[0]->Expat == 0 ) ? 'selected=selected' : '' }}>No</option>
+                    </select>
+                    <label class="invalid-feedback" id="edit_expat_error">Expatriate is required.</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
                 <div class="col-md-3">
                     <label for="edit_gender">Gender</label>
                     <select id="edit_gender" name="edit_gender" class="form-control edit-app-select2-no-search"
@@ -146,7 +198,7 @@
                     <label class="invalid-feedback" id="edit_bdate_error">Birth date is required.</label>
                     <label class="invalid-feedback" id="edit_age_error">Applicant must be at least 18 years old.</label>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <label for="edit_bprov">Birth Province</label>
                     <select id="edit_bprov" name="edit_bprov" class="form-control edit-app-select2"
                         data-placeholder="Select birth province">
@@ -160,7 +212,7 @@
                     </select>
                     <label class="invalid-feedback" id="edit_bprov_error">Birth province is required.</label>
                 </div>
-                <div class="col-md-5 {{ $applicant[0]->BirthProv_ID == 2000 ? 'd-none' : '' }}">
+                <div class="col-md-4 {{ $applicant[0]->BirthProv_ID == 2000 ? 'd-none' : '' }}">
                     <label for="edit_bmun">Birth Municipal</label>
                     <select id="edit_bmun" name="edit_bmun" class="form-control edit-app-select2"
                         data-placeholder="Select birth municipal"">
@@ -174,11 +226,18 @@
                     </select>
                     <label class=" invalid-feedback" id="edit_bmun_error">Birth municipal is required.</label>
                 </div>
-                <div class="col-md-5 {{ $applicant[0]->BirthProv_ID == 2000 ? '' : 'd-none' }}">
+                <div class="col-md-4 {{ $applicant[0]->BirthProv_ID == 2000 ? '' : 'd-none' }}">
                     <label for="edit_bothers">Birth Municipal</label>
                     <input id="edit_bothers" name="edit_bothers" type="text" class="form-control"
                         placeholder="Other municipal" value="{{ $applicant[0]->BirthTown }}">
                     <label class="invalid-feedback" id="edit_birthoth_error">Birth municipal is required.</label>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="edit_bzip">Birth Zip code</label>
+                        <input id="edit_bzip" name="edit_bzip" type="text" class="form-control" value="{{ $applicant[0]->BirthZip }}">
+                        <label class="invalid-feedback" id="edit_bzip_error">Birth zip code is required.</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -193,7 +252,7 @@
         </div>
         <div class="form-group">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="edit_province">Province</label>
                     <select id="edit_province" name="edit_province" class="form-control edit-app-select2"
                         data-placeholder="Select province">
@@ -234,6 +293,13 @@
                         @endforeach
                     </select>
                     <label class="invalid-feedback" id="edit_brgy_error">Barangay is required.</label>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label for="edit_zip">Zip code</label>
+                        <input id="edit_zip" name="edit_zip" type="text" class="form-control" value="{{ $applicant[0]->ZipCode }}">
+                        <label class="invalid-feedback" id="edit_zip_error">Zip code is required.</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -295,6 +361,39 @@
                     <input id="edit_philhealth" name="edit_philhealth" type="text" placeholder="xxxx-xxxx-xxxx"
                         class="form-control" maxlength="12" value="{{ $applicant[0]->PhilHealth }}">
                     <label class="invalid-feedback" id="edit_philhlength_error">Philhealth number requires 12 digits.</label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <h5 class="mb-3 text-uppercase bg-light p-2">Emergency Contact</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="edit_emergency_name">Name</label>
+                    <input id="edit_emergency_name" name="edit_emergency_name" type="text" class="form-control"value="{{ $applicant[0]->EmergencyName }}">
+                    <label class="invalid-feedback" id="edit_emergency_name_error">Emergency Name is required</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="edit_emergency_relationship">Relationship</label>
+                <select name="edit_emergency_relationship" id="edit_emergency_relationship" data-placeholder="Select relationship" class="form-control edit-app-select2">
+                    <option></option>
+                    @foreach ($relationship as $rs)
+                    @php
+                    $select = ($applicant[0]->Relationship_ID == $rs->Relationship_ID ) ? 'selected=selected' : '';
+                    @endphp
+                    <option value="{{ $rs->Relationship_ID }}" {{ $select }} >{{ $rs->Relationship }}</option>
+                    @endforeach
+                </select>
+                <label class="invalid-feedback" id="edit_emergency_relationship_error">Emergency Relationship is required.</label>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="edit_emergency_contact">Contact Number</label>
+                    <input id="edit_emergency_contact" name="edit_emergency_contact" type="text" class="form-control"
+                        maxlength="12" value="{{ $applicant[0]->EmergencyContact }}">
+                    <label class="invalid-feedback" id="edit_emergency_contact_error">Contact number requires 11 digits.</label>
                 </div>
             </div>
         </div>

@@ -40,29 +40,13 @@
     <div class="row align-items-baseline">
         <div class="col-md-6">
             <div class="form-group">
-                <select name="edit_educ_year_from" id="edit_educ_year_from" data-placeholder="From" class="form-control educ-select2">
-                    <option></option>
-                    @foreach ($year as $yr)
-                    @php
-                    $selectfrom = ($details[0]->YrFrom == $yr->Year) ? 'selected=selected' : '';
-                    @endphp
-                    <option value="{{ $yr->Year }}" {{$selectfrom}}>{{ $yr->Year }}</option>
-                    @endforeach
-                </select>
+                <input id="edit_educ_year_from" name="edit_educ_year_from" type="text" class="form-control flatpickr" placeholder="From" value="{{ $details[0]->YrFrom }}">
                 <label class="invalid-feedback" id="edit_educ_year_error"></label>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <select name="edit_educ_year_to" id="edit_educ_year_to" data-placeholder="To" class="form-control educ-select2">
-                    <option></option>
-                    @foreach ($year as $yr)
-                    @php
-                    $selectto = ($details[0]->YrTo == $yr->Year) ? 'selected=selected' : '';
-                    @endphp
-                    <option value="{{ $yr->Year }}" {{ $selectto }}>{{ $yr->Year }}</option>
-                    @endforeach
-                </select>
+                <input id="edit_educ_year_to" name="edit_educ_year_to" type="text" class="form-control flatpickr" placeholder="To" value="{{ $details[0]->YrTo }}">
             </div>
         </div>
     </div>

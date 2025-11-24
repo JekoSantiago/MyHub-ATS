@@ -31,7 +31,7 @@
                                 @if (($code ?? '') == '404')
                                 <a href="{{ URL::to('/dashboard') }}" class="btn btn-success waves-effect waves-light">Back to Dashboard</a>
                                 @else
-                                <a href="{{ config('app.myhub_url') }}" class="btn btn-success waves-effect waves-light">Back to MyHub</a>
+                                <a href="{{ env('MYHUB_LOGOUT_URL') }}" class="btn btn-success waves-effect waves-light">Back to MyHub</a>
                                 @endif
                             </div>
                         </div>

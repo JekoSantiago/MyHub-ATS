@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('logout', 'AuthController@logout');
 Route::post('/auth', 'AuthController@index');
 Route::redirect('/', url('/dashboard'));
+Route::get('/expired','AuthController@expired');
+
 
 //Pages
 Route::get('/dashboard','PageController@dashboard');
@@ -35,7 +37,9 @@ Route::post('/get-usage','DashboardController@getSSHRUsage');
 Route::get('/filter-applicant/show','ApplicantController@showFilterApplicants');
 Route::get('/new-applicant/show','ApplicantController@showNewApplicant');
 Route::get('/new-app-contact/show','ApplicantController@showNewAppContact');
+Route::get('/new-app-family/show','ApplicantController@showNewAppFamily');
 Route::get('/edit-app-contact/show/{id}','ApplicantController@showEditAppContact');
+Route::get('/edit-app-family/show/{id}','ApplicantController@showEditAppFamily');
 Route::get('/new-app-education/show','ApplicantController@showNewAppEducation');
 Route::get('/edit-app-education/show/{id}','ApplicantController@showEditAppEducation');
 Route::get('/new-app-experience/show','ApplicantController@showNewAppExperience');
@@ -55,9 +59,13 @@ Route::post('/applicant/update','ApplicantController@updateApplicant');
 // Applicant Contact ~ Insert ~ Update
 Route::post('/app-contact/save','ApplicantController@saveAppContact');
 Route::post('/app-contact/update','ApplicantController@updateAppContact');
+// Applicant Family ~ Insert ~ Update
+Route::post('/app-family/save','ApplicantController@saveAppFamily');
+Route::post('/app-family/update','ApplicantController@updateAppfamily');
 // Applicant Education ~ Insert ~ Update
 Route::post('/app-education/save','ApplicantController@saveAppEducation');
 Route::post('/app-education/update','ApplicantController@updateAppEducation');
+Route::post('/update-firstjob','ApplicantController@updateFirstJob');
 // Applicant Experience ~ Insert ~ Update
 Route::post('/app-experience/save','ApplicantController@saveAppExperience');
 Route::post('/app-experience/update','ApplicantController@updateAppExperience');

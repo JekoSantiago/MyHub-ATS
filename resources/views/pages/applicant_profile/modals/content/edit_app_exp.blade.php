@@ -45,63 +45,21 @@
             </div>
         </div>
     </div>
-    <label for="edit_exp_month_from">Start date</label>
     <div class="row align-items-baseline">
         <div class="col-md-6">
             <div class="form-group">
-                <select name="edit_exp_month_from" id="edit_exp_month_from" data-placeholder="Month" class="form-control exp-select2">
-                    <option></option>
-                    @foreach ($month as $mt)
-                    @php
-                    $select = ($details[0]->ExpMoFrom == $mt->Month_ID ) ? 'selected=selected' : '';
-                    @endphp
-                    <option value="{{ $mt->Month_ID }}" {{ $select }}>{{ $mt->Month }}</option>
-                    @endforeach
-                </select>
+                <label for="edit_exp_month_from">Start date</label>
+                <input id="edit_exp_month_from" name="edit_exp_month_from" type="text" class="form-control flatpickr" placeholder="From" value="{{ $details[0]->DateFrom }}">
+                <label class="invalid-feedback" id="edit_educ_year_error"></label>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <select name="edit_exp_year_from" id="edit_exp_year_from" data-placeholder="Year" class="form-control exp-select2">
-                    <option></option>
-                    @foreach ($year as $yr)
-                    @php
-                    $select = ($details[0]->ExpYrFrom == $yr->Year ) ? 'selected=selected' : '';
-                    @endphp
-                    <option value="{{ $yr->Year }}" {{ $select }}>{{ $yr->Year }}</option>
-                    @endforeach
-                </select>
+                <label for="edit_exp_month_to">End date</label>
+                <input id="edit_exp_month_to" name="edit_exp_month_to" type="text" class="form-control flatpickr" placeholder="To" value="{{ $details[0]->DateTo }}">
+                <label class="invalid-feedback" id="edit_educ_year_error"></label>
             </div>
         </div>
     </div>
-    <label for="edit_exp_month_to">End date</label>
-    <div class="row align-items-baseline">
-        <div class="col-md-6">
-            <div class="form-group">
-                <select name="edit_exp_month_to" id="edit_exp_month_to" data-placeholder="Month" class="form-control exp-select2">
-                    <option></option>
-                    @foreach ($month as $mt)
-                    @php
-                    $select = ($details[0]->ExpMoTo == $mt->Month_ID ) ? 'selected=selected' : '';
-                    @endphp
-                    <option value="{{ $mt->Month_ID }}" {{ $select }}>{{ $mt->Month }}</option>
-                    @endforeach
-                </select>
-                <label class="invalid-feedback" id="edit_exp_date_error"></label>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <select name="edit_exp_year_to" id="edit_exp_year_to" data-placeholder="Year" class="form-control exp-select2">
-                    <option></option>
-                    @foreach ($year as $yr)
-                    @php
-                    $select = ($details[0]->ExpYrTo == $yr->Year ) ? 'selected=selected' : '';
-                    @endphp
-                    <option value="{{ $yr->Year }}" {{ $select }}>{{ $yr->Year }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    </div>
+
 </form>

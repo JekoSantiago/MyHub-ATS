@@ -36,23 +36,13 @@
     <div class="row align-items-baseline">
         <div class="col-md-6">
             <div class="form-group">
-                <select name="new_educ_year_from" id="new_educ_year_from" data-placeholder="From" class="form-control educ-select2">
-                    <option></option>
-                    @foreach ($year as $yr)
-                    <option value="{{ $yr->Year }}">{{ $yr->Year }}</option>
-                    @endforeach
-                </select>
+                <input id="new_educ_year_from" name="new_educ_year_from" type="text" class="form-control flatpickr" placeholder="From">
                 <label class="invalid-feedback" id="new_educ_year_error"></label>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <select name="new_educ_year_to" id="new_educ_year_to" data-placeholder="To" class="form-control educ-select2">
-                    <option></option>
-                    @foreach ($year as $yr)
-                    <option value="{{ $yr->Year }}">{{ $yr->Year }}</option>
-                    @endforeach
-                </select>
+                <input id="new_educ_year_to" name="new_educ_year_to" type="text" class="form-control flatpickr" placeholder="To">
             </div>
         </div>
     </div>

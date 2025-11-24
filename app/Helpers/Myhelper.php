@@ -230,6 +230,18 @@ class Myhelper
         return $result;
     }
 
+    public static function decrypt($data)
+    {
+      $hashKey = 'atp_dev';
+
+      $METHOD = 'aes-256-cbc';
+      $IV = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
+      $key = substr(hash('sha256', $hashKey, true), 0, 32);
+      $decrypted = openssl_decrypt(base64_decode($data),$METHOD, $key, OPENSSL_RAW_DATA, $IV);
+
+      return $decrypted;
+    }
+
     /**
      * Encrypt SHA256 with hashkey
      */
@@ -292,10 +304,10 @@ class Myhelper
 
     public static function checkPosition($posID)
     {
-        if($posID == 101)
-        {
-            $posID = 73;
-        };
+        // if($posID == 101)
+        // {
+        //     $posID = 73;
+        // };
 
         if($posID == config('app.store_crew')) :
             return TRUE;
@@ -313,6 +325,8 @@ class Myhelper
             return TRUE;
         elseif($posID == config('app.area_manager')) :
             return TRUE;
+        elseif($posID == config('app.store_leader')):
+            return TRUE;
         else :
             return FALSE;
         endif;
@@ -320,20 +334,18 @@ class Myhelper
 
     public static function checkResult($posID, array $data)
     {
-        if($posID == 101)
-        {
-            $posID = 73;
-        };
 
         $parent  = config('app.prog_sc');
         $result  = 0;
         $text    = 'No record';
         $icon    = 'mdi-checkbox-blank-outline';
         $bool    = TRUE;
+        $enroll  = FALSE;
 
 
         $sl = array(
             config('app.shift_leader'),
+            config('app.store_leader'),
             config('app.store_sup'),
             config('app.site_dev_sup'),
             config('app.ass_store_sup'),
@@ -345,6 +357,7 @@ class Myhelper
 
             // dump($data[0]->Parent_Program_ID == config('app.prog_am'),$data);
             $result = $data[0]->Recommendation_ID;
+            $enroll = TRUE;
             if ($data[0]->Recommendation != null) :
                 $text = $data[0]->Recommendation;
 
@@ -355,7 +368,7 @@ class Myhelper
                         $icon = 'mdi-checkbox-intermediate';
                     elseif ($result == 1) :
                         if (in_array($posID, $sl)) :
-                            $parent  = config('app.prog_sl');
+                            $parent  = config('app.prog_sh');
                             $bool = TRUE;
                             $icon = 'mdi-checkbox-intermediate text-warning';
                         else :
@@ -363,6 +376,22 @@ class Myhelper
                             $icon = 'mdi-checkbox-marked-outline text-success';
                         endif;
                     else :
+                        $bool = FALSE;
+                        $icon = 'mdi-close-box-outline text-danger';
+                    endif;
+                elseif($data[0]->Parent_Program_ID == config('app.prog_sh')) :
+                    if ($result == 2 || $result == 5) :
+                        $parent  = config('app.prog_sh');
+                        $bool = TRUE;
+                        $icon = 'mdi-checkbox-intermediate text-warning';
+                    elseif($result == 1 && $posID != config('app.shift_leader')) :
+                        $parent  = config('app.prog_sl');
+                        $bool = TRUE;
+                        $icon = 'mdi-checkbox-marked-outline text-warning';
+                    elseif($result == 1) :
+                        $bool = FALSE;
+                        $icon = 'mdi-checkbox-marked-outline text-success';
+                    else:
                         $bool = FALSE;
                         $icon = 'mdi-close-box-outline text-danger';
                     endif;
@@ -428,7 +457,8 @@ class Myhelper
             'bool'   => $bool,
             'result' => $result,
             'text'   => $text,
-            'icon'   => $icon
+            'icon'   => $icon,
+            'enroll' => $enroll,
         );
 
         return $info;
@@ -524,7 +554,7 @@ class Myhelper
         return $thirdDisable;
     }
 
-    public static function checkVisibleCompleteReq($app, $employment)
+    public static function checkVisibleCompleteReq($app, $employment, $con)
     {
         $positionID  = $app[0]->Position_ID;
         $sss         = $app[0]->SSS;
@@ -545,23 +575,41 @@ class Myhelper
         $basic       = $employment[0]->Basic;
         $isDeployed  = $employment[0]->isDeployed;
         $visible     = TRUE;
+        $contact     = FALSE;
+
+        $hasC2 = false;
+        $hasC3 = false;
+        foreach($con as $c)
+        {
+            if ($c->ContactType_ID== 2)
+            {
+            $hasC2 = true;
+            } elseif ($c->ContactType_ID == 3) {
+            $hasC3 = true;
+            }
+        }
+        if($hasC2 && $hasC3):
+            $contact = TRUE;
+        endif;
 
         if( $isDeployed == 0 ) :
             if($positionID == config('app.store_crew')) :
                 if( $sss != ''        && $philhealth != '' && $hdmf != ''     && $tin != ''       && $empNo != ''       &&
                     $superiorID != '' && $medDate != ''    && $clinicID != '' && $physician != '' && $medResultID != '' &&
                     $companyID != ''  && $locID != ''      && $hireDate != '' && $payType != ''   && $payModeID != ''   &&
-                    $basic != '' ) :
+                    $basic != '' && $contact == TRUE) :
 
                     $visible = TRUE;
                 else :
                     $visible = FALSE;
                 endif;
             else:
+
+
                 if( $sss != ''         && $philhealth != '' && $hdmf != ''     && $tin != ''       &&
                     $superiorID != ''  && $medDate != ''    && $clinicID != '' && $physician != '' &&
                     $medResultID != '' && $companyID != ''  && $locID != ''    && $hireDate != ''  &&
-                    $payType != ''     && $payModeID != ''  && $basic != '') :
+                    $payType != ''     && $payModeID != ''  && $basic != '' && $contact == TRUE) :
 
                     $visible = TRUE;
                 else :
@@ -582,9 +630,14 @@ class Myhelper
         $applyDate   = $app[0]->DateApply;
         $medResult   = $app[0]->ResultType;
         $isDeploy    = $app[0]->isDeployed;
+        $isWithRequirements = $app[0]->isWithRequirements;
         $intResult   = Myhelper::checkInterview($app_int);
         $trainResult = Myhelper::checkResult($position, $checkTraining);
         $enable      = '';
+
+
+
+        // dump($trainResult);
 
         if($isDeploy == 0) :
             if(in_array($position, config('app.pos_with_training'))) :
@@ -595,7 +648,7 @@ class Myhelper
                         $enable = 'disabled';
                     endif;
                 else:
-                    if($appStatus == 1 && $intResult['status'] == 1 && $trainResult['result'] == 1 && in_array($medResult, config('app.passed_medical'))) :
+                    if($appStatus == 1 && $intResult['status'] == 1 && $trainResult['enroll'] == TRUE  && in_array($medResult, config('app.passed_medical'))) :
                         $enable = '';
                     else:
                         $enable = 'disabled';
@@ -723,6 +776,20 @@ class Myhelper
         $newdate = date('Y-m-d',strtotime($date. ' - '. $days . ' days'));
 
         return $newdate;
+    }
+
+    public static function generateQM($data)
+    {
+        $totalParams = count($data);
+        if($totalParams == 0):
+        return '';
+        else:
+        $param = '';
+            foreach($data as $d):
+            $param.='?,';
+            endforeach;
+        return substr($param, 0, -1);
+        endif;
     }
 }
 

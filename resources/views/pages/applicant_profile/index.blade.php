@@ -54,17 +54,17 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3">
-            <div class="card-box text-center">
+        <div class="col-md-3" id="profile-card">
+            <div class="card-box text-center" id="profile">
                 <img src="{{asset('assets/images/app_thumbnail.jpg')}}" class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
                 <h4 class="mb-0" id='appFullname'>{{ $applicant[0]->LastName }}, {{ $applicant[0]->FirstName }} {{ $applicant[0]->MiddleName }}</h4>
                 <p class="text-muted">{{ $applicant[0]->Position }}</p>
                 @if( $applicant[0]->isDeployed == 1 )
                 <div class="mb-2">
-                    <span class="badge badge-success">Deployed</span>
+                <span class="badge badge-success">Deployed</span>
                 </div>
                 @endif
-                @if( $applicant[0]->isWithRequirements == 1 && $applicant[0]->isDeployed == 0  && $applicant[0]->EmployeeNo != NULL && $applicant[0]->EmployeeNo /* && $employment[0]->Record_ID != NULL */ && $employment[0]->OnBoardingDate)
+                @if( $applicant[0]->isWithRequirements == 1 && $applicant[0]->isDeployed == 0  && $applicant[0]->EmployeeNo != NULL && $applicant[0]->EmployeeNo /* && $employment[0]->Record_ID != NULL */ && $employment[0]->OnBoardingDate && $employment[0]->DateHired != '')
                     @if(MyHelper::checkPosition($applicant[0]->Position_ID) || (!MyHelper::checkPosition($applicant[0]->Position_ID) && $employment[0]->AFHDate != NULL))
                     <button type="button" id="btn_tag_deploy" data-toggle="tooltip" data-placement="top" title="" data-original-title="Click this button to tag as deployed" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Deploy?</button>
                     @endif
@@ -79,7 +79,9 @@
                 <div class="btn-group mb-2">
                     <button type="button" class="btn btn-xs btn-light dropdown-toggle waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-printer"></i> Print <i class="mdi mdi-chevron-down"></i></button>
                     <div class="dropdown-menu">
+                        @if($printable)
                         <a class="dropdown-item" target="_blank" href="{{ URL::to('/app-rec/show/' . $applicant[0]->Applicant_ID) }}">Applicant Record</a>
+                        @endif
                         <a class="dropdown-item" target="_blank" href="{{ URL::to('/org-app/show/' . $applicant[0]->Applicant_ID . '/' . $employment[0]->AssignCat_ID) }}">Original Appointment</a>
                         <a class="dropdown-item" target="_blank" href="{{ URL::to('/emp-rec/show/' . $applicant[0]->Applicant_ID) }}">Employee Record</a>
                     </div>
@@ -202,6 +204,50 @@
                     </table>
                 </div>
             </div>
+            <div class="card-box">
+                <h5 class="header-title text-uppercase mb-3">Family
+                    <a href="javascript: void(0);" data-toggle="modal" data-target="#modal_new_family" data-appid="{{ $applicant[0]->Applicant_ID }}"
+                        class="float-right"><i class="mdi mdi-plus-thick"></i></a>
+                </h5>
+                <div class="table-responsive" id="family-card-body">
+                    <table class="table text-nowrap table-centered table-info-profile mb-0" id="table-family">
+                        <tbody>
+                            @if(count($fam) > 0)
+                            @foreach ($fam as $f)
+                            <tr>
+                                <td class="px-0">
+                                    <div class="avatar-sm">
+                                        <span class="avatar-title bg-soft-secondary text-secondary font-20 rounded-circle">
+                                            <i class="mdi mdi-account-multiple-outline mdi-24px mdi-set"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="col">
+                                    <div>
+                                        <span>{{ $f->FullName }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-muted">{{ $f->Relationship }}</span>
+                                    </div>
+                                </td>
+                                <td class="pr-0">
+                                    <a href="javascript: void(0);" class="font-18" data-toggle="modal" data-target="#modal_edit_family" data-cid="{{ $f->Family_ID }}">
+                                        <i class="mdi mdi-square-edit-outline"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td class="col pr-0 pl-0">
+                                    <span>No records found...</span>
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="col-md-9">
             <div class="tab-content p-0">
@@ -235,6 +281,8 @@
 <input type="hidden" name="hidden_ParentProgID" id="hidden_ParentProgID" value="{{ $traininginfo['parent'] }}">
 
 @include('pages.applicant_profile.modals.new_app_contact')
+@include('pages.applicant_profile.modals.new_app_family')
+@include('pages.applicant_profile.modals.edit_app_family')
 @include('pages.applicant_profile.modals.edit_app_contact')
 @include('pages.applicant_profile.modals.new_app_educ')
 @include('pages.applicant_profile.modals.edit_app_educ')

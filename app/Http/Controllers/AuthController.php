@@ -15,7 +15,7 @@ class AuthController extends Controller
         $id     = request()->input('id');
         $empID  = MyHelper::decryptSHA256($id);
         $result = Authentication::getUserDetails($empID);
-        $uRole  = Authentication::userRole($empID);
+        $uRole  = Authentication::getUserDetails($empID);
 
         // dd($uRole);
 
@@ -24,13 +24,13 @@ class AuthController extends Controller
         Session::put('EmpNo', base64_encode($result[0]->EmployeeNo));
         Session::put('Role_ID', base64_encode($uRole[0]->Role_ID));
         Session::put('Emp_Name', base64_encode($result[0]->empl_name));
-        Session::put('PositionLevelCode', base64_encode($uRole[0]->PositionLevelCode));
+        // Session::put('PositionLevelCode', base64_encode($uRole[0]->PositionLevelCode));
         Session::put('PositionLevel_ID', base64_encode($result[0]->PositionLevel_ID));
-        Session::put('DivisionCode', base64_encode($uRole[0]->DivisionCode));
-        Session::put('Division_ID', base64_encode($uRole[0]->Division_ID));
-        Session::put('Company_ID', base64_encode($uRole[0]->Company_ID));
+        // Session::put('DivisionCode', base64_encode($uRole[0]->DivisionCode));
+        // Session::put('Division_ID', base64_encode($uRole[0]->Division_ID));
+        // Session::put('Company_ID', base64_encode($uRole[0]->Company_ID));
         Session::put('Department_ID', base64_encode($result[0]->Department_ID));
-        Session::put('DepartmentCode', base64_encode($uRole[0]->DepartmentCode));
+        // Session::put('DepartmentCode', base64_encode($uRole[0]->DepartmentCode));
         Session::put('Department', base64_encode($result[0]->Department));
         Session::put('Location_ID', base64_encode($result[0]->Location_ID));
         Session::put('LocationCode', base64_encode($result[0]->LocationCode));
@@ -51,5 +51,10 @@ class AuthController extends Controller
         Session::flush();
 
         return Redirect::to(config('app.myhub_logout_url'));
+    }
+
+    public function expired()
+    {
+        return  abort(501);
     }
 }

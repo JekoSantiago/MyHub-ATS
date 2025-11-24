@@ -75,6 +75,54 @@
         </div>
         <div class="form-group">
             <div class="row">
+                <div class="col-md-4">
+                    <label for="new_nick_name">Nick name</label>
+                    <input id="new_nick_name" name="new_nick_name" type="text" class="form-control" value="">
+                    <label class="invalid-feedback" id="new_nick_name_error">Nick name is required.</label>
+                </div>
+                <div class="col-md-8">
+                    <label for="new_maiden_name">Mother's Maiden name</label>
+                    <input id="new_maiden_name" name="new_maiden_name" type="text" class="form-control" value="">
+                    <label class="invalid-feedback" id="new_maiden_name_error">Mother's Maiden name is required.</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="new_blood">Blood Type</label>
+                    <select id="new_blood" name="new_blood" class="form-control select2-no-search"
+                        data-placeholder="Select blood type">
+                        <option></option>
+                        @foreach ($blood as $b)
+                        <option value={{ $b->BloodType_ID }}>{{ $b->BloodType }}</option>
+                        @endforeach
+                    </select>
+                    <label class="invalid-feedback" id="new_blood_error">Blood Type is required.</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="new_weight">Weight (kg)</label>
+                    <input id="new_weight" name="new_weight" type="number" class="form-control" value="">
+                    <label class="invalid-feedback" id="new_weight_error">Weight is required.</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="new_height">Height (ft'in)</label>
+                    <input id="new_height" name="new_height" type="text" class="form-control" value="">
+                    <label class="invalid-feedback" id="new_height_error">Height is required.</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="new_expat">Expatriate</label>
+                    <select id="new_expat" name="new_expat" class="form-control select2-no-search"
+                        data-placeholder="">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                    <label class="invalid-feedback" id="new_expat_error">Expatriate is required.</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
                 <div class="col-md-3">
                     <label for="new_gender">Gender</label>
                     <select id="new_gender" name="new_gender" class="form-control select2-no-search"
@@ -123,7 +171,7 @@
                     <label class="invalid-feedback" id="new_bdate_error">Birth date is required.</label>
                     <label class="invalid-feedback" id="new_age_error">Applicant must be at least 18 years old.</label>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <label for="new_bprov">Birth Province</label>
                     <select id="new_bprov" name="new_bprov" class="form-control select2"
                         data-placeholder="Select birth province">
@@ -134,7 +182,7 @@
                     </select>
                     <label class="invalid-feedback" id="new_bprov_error">Birth province is required.</label>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <label for="new_bmun">Birth Municipal</label>
                     <select id="new_bmun" name="new_bmun" class="form-control select2"
                         data-placeholder="Select birth municipal"">
@@ -142,11 +190,18 @@
                     </select>
                     <label class=" invalid-feedback" id="new_bmun_error">Birth municipal is required.</label>
                 </div>
-                <div class=" col-md-5 d-none">
+                <div class=" col-md-4 d-none">
                     <label for="new_bothers">Birth Municipal</label>
                     <input id="new_bothers" name="new_bothers" type="text" class="form-control"
                         placeholder="Other municipal">
                     <label class="invalid-feedback" id="new_birthoth_error">Birth municipal is required.</label>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="new_bzip">Birth Zip code</label>
+                        <input id="new_bzip" name="new_bzip" type="text" class="form-control" maxlength="4">
+                        <label class="invalid-feedback" id="new_bzip_error">Birth zip code is required.</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -161,7 +216,7 @@
         </div>
         <div class="form-group">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="new_province">Province</label>
                     <select id="new_province" name="new_province" class="form-control select2"
                         data-placeholder="Select province">
@@ -187,6 +242,13 @@
                         <option></option>
                     </select>
                     <label class="invalid-feedback" id="new_brgy_error">Barangay is required.</label>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label for="new_zip">Zip code</label>
+                        <input id="new_zip" name="new_zip" type="text" class="form-control" maxlength="4">
+                        <label class="invalid-feedback" id="new_zip_error">Zip code is required.</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -245,6 +307,36 @@
                     <input id="new_philhealth" name="new_philhealth" type="text" placeholder="xxxx-xxxx-xxxx"
                         class="form-control" maxlength="12">
                     <label class="invalid-feedback" id="new_philhlength_error">Philhealth number requires 12 digits.</label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <h5 class="mb-3 text-uppercase bg-light p-2">Emergency Contact</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="new_emergency_name">Name</label>
+                    <input id="new_emergency_name" name="new_emergency_name" type="text" class="form-control">
+                    <label class="invalid-feedback" id="new_emergency_name_error">Emergency Name is required</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="new_emergency_relationship">Relationship</label>
+                <select name="new_emergency_relationship" id="new_emergency_relationship" data-placeholder="Select relationship" class="form-control select2">
+                    <option></option>
+                    @foreach ($relationship as $rs)
+                    <option value="{{ $rs->Relationship_ID }}">{{ $rs->Relationship }}</option>
+                    @endforeach
+                </select>
+                <label class="invalid-feedback" id="new_emergency_relationship_error">Emergency Relationship is required.</label>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="new_emergency_contact">Contact Number</label>
+                    <input id="new_emergency_contact" name="new_emergency_contact" type="text" class="form-control"
+                        maxlength="">
+                    <label class="invalid-feedback" id="new_emergency_contact_error">Contact number requires 11 digits.</label>
                 </div>
             </div>
         </div>

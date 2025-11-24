@@ -155,18 +155,19 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="edit_emp_basic">Basic</label>
-                    <input id="edit_emp_basic" name="edit_emp_basic" type="text" class="form-control" value="{{ $employment[0]->Basic }}" {{ $othdisable }}>
+                    <input id="edit_emp_basic" name="edit_emp_basic" type="number" class="form-control" value="{{ $employment[0]->Basic }}" {{ $othdisable }}>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="edit_emp_cola">Cola</label>
-                    <input id="edit_emp_cola" name="edit_emp_cola" type="text" class="form-control" value="{{ $employment[0]->COLA }}" {{ $othdisable }}>
+                    <input id="edit_emp_cola" name="edit_emp_cola" type="number" class="form-control" value="{{ $employment[0]->COLA }}" {{ $othdisable }}>
+
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="edit_emp_bank">Bank</label>
                     <select id="edit_emp_bank" name="edit_emp_bank" class="form-control employment-select2-no-search"
@@ -179,7 +180,14 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="edit_emp_bank_code">Bank Branch code</label>
+                    <input id="edit_emp_bank_code" name="edit_emp_bank_code" type="text" class="form-control" maxlength="5" value="{{ $employment[0]->BankCode }}">
+                    <label class="invalid-feedback" id="edit_emp_bank_code_error"></label>
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="edit_emp_acctype">Account Type</label>
                     <select id="edit_emp_acctype" name="edit_emp_acctype" class="form-control employment-select2-no-search"
@@ -187,7 +195,7 @@
                         <option></option>
                         @foreach ($accttype as $act)
                         @php
-                        $select = ($employment[0]->AcctType == $act->AcctTypeID ) ? 'selected=selected' : '';
+                        $select = ($employment[0]->AcctType == $act->AcctTypeID) ? 'selected=selected' :  ($act->AcctTypeID == 1 ) ?  'selected=selected' : '';
                         @endphp
                             <option value={{ $act->AcctTypeID }} {{ $select }}>{{ $act->AcctType }}</option>
                         @endforeach
@@ -198,9 +206,16 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
+                    <label for="edit_emp_bank_name">Bank Branch Name</label>
+                    <input id="edit_emp_bank_name" name="edit_emp_bank_name" type="text" class="form-control" maxlength="16" value="{{ $employment[0]->BankName }}">
+                    <label class="invalid-feedback" id="edit_emp_bank_name_error"></label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
                     <label for="edit_emp_accno">Account Number</label>
-                    <input id="edit_emp_accno" name="edit_emp_accno" type="text" class="form-control" maxlength="16" value="{{ $employment[0]->AcctNo }}">
-                    <label class="invalid-feedback" id="edit_emp_accno_error"></label>
+                    <input id="edit_emp_accno" name="edit_emp_accno" type="text" class="form-control" maxlength="12" value="{{ $employment[0]->AcctNo }}">
+                    <label class="invalid-feedback" id="edit_emp_accno_error">Account number must be 12 digits</label>
                 </div>
             </div>
         </div>

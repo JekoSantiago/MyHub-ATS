@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Report;
+use Illuminate\Support\Facades\Session;
+use Myhelper;
+
 
 
 class ReportController extends Controller
@@ -139,7 +142,8 @@ class ReportController extends Controller
     public function showRPTEmployeeRecord($appID)
     {
         $rptID = config('app.rpt_emp_rec');
-        $rptParam = 'ApplicantID=' . $appID;
+        $userID = Myhelper::decrypt(Session::get('Employee_ID'));
+        $rptParam = 'ApplicantID=' . $appID . '|' . 'UserID=' . $userID ;
         $create = Report::createRPTSession($rptID, $rptParam);
         $result = $create[0]->RETURN;
 

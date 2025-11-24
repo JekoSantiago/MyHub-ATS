@@ -113,11 +113,13 @@ return [
     'prog_sl'      => 18,
     'prog_ac'      => 1008,
     'prog_am'      => 1009,
+    'prog_sh'      => 3048, /*SHLT*/
 
 
     // Dept. Position_ID
     'store_crew'    => 74,
-    'shift_leader'  => 73,
+    'shift_leader'  => 73, /* SHL */
+    'store_leader' => 101, /* SL */
     'store_sup'     => 69,
     'site_dev_ass'  => 57,
     'site_dev_sup'  => 58,

@@ -249,6 +249,16 @@ class Common extends Model
         $prf = DB::connection('dbATS')->select('EXEC sp_PRFDeployed_Get ?' , $data);
         return $prf;
     }
+
+    public static function getBloodTypes()
+    {
+        return DB::connection('dbATS')->select('sp_BloodType_Get ');
+    }
+
+    public static function getRelationship()
+    {
+        return DB::connection('dbATS')->select('sp_Relationship_Get ');
+    }
 }
 
 /* End of file Common.php

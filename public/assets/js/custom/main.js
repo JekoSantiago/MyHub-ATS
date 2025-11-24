@@ -6,6 +6,12 @@ $(function () {
         }
     });
 
+    $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+        if (jqxhr.status === 419 || jqxhr.status === 501 ) {
+          window.location.href = WebURL + '/expired';
+        }
+    });
+
 })
 
 function check18Years(birthdate) {

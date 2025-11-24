@@ -1,3 +1,15 @@
+<h5 class="header-title text-uppercase ">First Job?
+</h5>
+<div class="row mb-3">
+    <div class="col-md-2">
+        <select name="first_job" id="first_job" data-placeholder="Select school type" class="form-control employment-select2-no-search" data-appid="{{ $applicant[0]->Applicant_ID }}">
+            <option value="0" @if($applicant[0]->FirstJob == 0) selected @endif>No</option>
+            <option value="1" @if($applicant[0]->FirstJob == 1) selected @endif>Yes</option>
+        </select>
+    </div>
+</div>
+
+
 <h5 class="header-title text-uppercase mb-3">Educational background
     <a href="javascript: void(0);" data-toggle="modal" data-target="#modal_new_education" data-appid="{{ $applicant[0]->Applicant_ID }}"
         class="float-right"><i class="mdi mdi-plus-thick"></i></a>
@@ -32,7 +44,7 @@
                         <span>{{ $sctypecourse }}</span>
                     </div>
                     <div>
-                        <span class="text-muted font-11">{{ $as->YrFrom }} - {{ $as->YrTo }}</span>
+                        <span class="text-muted font-11">{{ date("F d, Y", strtotime($as->YrFrom)) }} - {{ date("F d, Y", strtotime($as->YrTo)) }}</span>
                     </div>
                 </td>
                 <td class="px-0">
@@ -77,7 +89,7 @@
                         <span>{{ $ae->Employer }}</span>
                     </div>
                     <div>
-                        <span class="text-muted font-11">{{ $ae->MonthFrom }} {{ $ae->ExpYrFrom }} - {{ $ae->MonthTo }} {{ $ae->ExpYrTo }}</span>
+                        <span class="text-muted font-11">{{ $ae->MonthFrom }} @if($ae->ExpDayFrom){{ $ae->ExpDayFrom . ',' }}@endif {{ $ae->ExpYrFrom }} - {{ $ae->MonthTo }} @if($ae->ExpDayTo){{ $ae->ExpDayTo . ','}}@endif {{ $ae->ExpYrTo }}</span>
                     </div>
                 </td>
                 <td class="px-0">

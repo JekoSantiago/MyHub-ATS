@@ -66,7 +66,7 @@
             <tr>
                 <td class="text-center">
                     <a href="javascript:void(0);" data-toggle="modal" data-target="#modal_app_training_details" data-appid="{{ $train->Applicant_ID }}" data-progid="{{ $train->Program_ID }}" class="action-icon text-primary"><i class="mdi mdi-eye"></i></a>
-                    @if(Myhelper::minusDaysToDate($train->MinDate, 1) > date('Y-m-d') && $train->AveRating == '')
+                    @if(Myhelper::minusDaysToDate($train->MinDate, 1) > date('Y-m-d') && $train->AveRating == '' && $employment[0]->EmployeeNo == '')
                     <a href="javascript:void(0);" class="action-icon text-primary link-remove-applicant" data-progid="{{ $train->Program_ID }}"><i class="mdi mdi-account-remove"></i></a>
                     @endif
                 </td>

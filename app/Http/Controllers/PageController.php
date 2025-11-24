@@ -8,20 +8,10 @@ use App\Models\Applicant;
 use App\Models\Common;
 use App\Models\Training;
 use Myhelper;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class PageController extends Controller
 {
-    public function __construct()
-    {
-        // $this->middleware(function ($request, $next) {
-        //     if (is_null(Session::get('EmpNo'))) :
-        //         abort(401);
-        //     else :
-        //         return $next($request);
-        //     endif;
-        // });
-    }
 
     public function dashboard(Request $request)
     {
@@ -62,6 +52,8 @@ class PageController extends Controller
         $app_train     = Training::getAppTraining($id);
         $checkTraining = Training::checkTraining($id);
         $prfDeployed   = Common::getPRFDeployed([$app_emp[0]->Record_ID]);
+        $fam           = Applicant::getAppFamily([$id]);
+
 
         //  dump($app_emp);
         $data['applicant']     = $app;
@@ -100,18 +92,14 @@ class PageController extends Controller
         $data['intinfo']       = Myhelper::checkInterview($app_int);
         $data['empdisable']    = Myhelper::checkEnableEmpInput($app, $app_int, $checkTraining);
         $data['othdisable']    = Myhelper::checkEnableEmpOtherInput($app[0]->isWithRequirements);
-        $data['reqvisible']    = Myhelper::checkVisibleCompleteReq($app, $app_emp);
+        $data['reqvisible']    = Myhelper::checkVisibleCompleteReq($app, $app_emp, $app_con);
+
         $data['title']         = $app[0]->AppName;
         $data['prfDep']        = (empty($prfDeployed)) ? NULL : $prfDeployed[0]->ControllNumber;
-
-
-        // dd($data['traininginfo']);
-        // $page = Request::get('page', 1);
-        // $paginate = 2;
-
-        // $offSet = ($page * $paginate) - $paginate;
-        // $itemsForCurrentPage = array_slice($ae, $offSet, $paginate, true);
-        // $ae = new \Illuminate\Pagination\LengthAwarePaginator($itemsForCurrentPage, count($ae), $paginate, $page, ['path' => URL::current()]);
+        $data['blood']         = Common::getBloodTypes();
+        $data['fam']        = $fam;
+        $data['relationship'] = Common::getRelationship();
+        $data['printable'] = ($app[0]->Height && $app[0]->Weight && $app[0]->BloodType_ID && !empty($fam) && !empty($app_educ)  && $app_emp[0]->Bank_ID && $app_emp[0]->BankCode && $app_emp[0]->AcctType && $app_emp[0]->BankName && $app_emp[0]->AcctNo && (($app[0]->FirstJob == 0) ? !empty($app_exp) : TRUE ));
 
         return view('pages.applicant_profile.index', $data);
     }

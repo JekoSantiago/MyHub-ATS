@@ -29,6 +29,9 @@ class ApplicantController extends Controller
         $data['civilstatus'] = Common::getCivilstatus();
         $data['taxcode']     = Common::getTaxcode();
         $data['province']    = Common::getProvince();
+        $data['blood']       = Common::getBloodTypes();
+        $data['relationship'] = Common::getRelationship();
+
 
         return view('pages.applicants.modals.content.new_applicant', $data);
     }
@@ -38,11 +41,18 @@ class ApplicantController extends Controller
      */
     public function saveApplicant(Request $request)
     {
+        // dd($request);
         $data = array(
             $request->new_app_date,
             $request->new_last_name,
             $request->new_first_name,
             $request->new_middle_name,
+            $request->new_nick_name,
+            $request->new_maiden_name,
+            $request->new_blood,
+            $request->new_weight,
+            str_replace("'", '|',$request->new_height),
+            $request->new_expat,
             $request->new_pos_app,
             $request->new_app_status,
             $request->new_reason,
@@ -64,7 +74,14 @@ class ApplicantController extends Controller
             $request->new_dependent,
             str_replace('-', '',$request->new_hdmf),
             $request->new_hire_source,
+            $request->new_emergency_name,
+            $request->new_emergency_contact,
+            $request->new_emergency_relationship,
+            $request->new_bzip,
+            $request->new_zip
         );
+
+        // dd($data);
 
         $insert = Applicant::insertApplicant($data);
 
@@ -91,6 +108,12 @@ class ApplicantController extends Controller
             $request->edit_last_name,
             $request->edit_first_name,
             $request->edit_middle_name,
+            $request->edit_nick_name,
+            $request->edit_maiden_name,
+            $request->edit_blood,
+            $request->edit_weight,
+            str_replace("'", '|',$request->edit_height),
+            $request->edit_expat,
             $request->edit_pos_app,
             $request->edit_app_status,
             $request->edit_reason,
@@ -112,10 +135,15 @@ class ApplicantController extends Controller
             $request->edit_dependent,
             str_replace('-', '',$request->edit_hdmf),
             $request->edit_hire_source,
+            $request->edit_emergency_name,
+            $request->edit_emergency_contact,
+            $request->edit_emergency_relationship,
+            $request->edit_bzip,
+            $request->edit_zip
         );
 
+        // dd($data);
         $update = Applicant::updateApplicant($data);
-
         $num = $update[0]->RETURN;
 
         if ($num > 0) :
@@ -232,6 +260,8 @@ class ApplicantController extends Controller
         $data['municipal']   = Common::getMunicipal($result[0]->Province_ID);
         $data['barangay']    = Common::getBarangay($result[0]->Municipal_ID);
         $data['bmunicipal']  = Common::getMunicipal($result[0]->BirthProv_ID);
+        $data['blood']       = Common::getBloodTypes();
+        $data['relationship'] = Common::getRelationship();
 
         return view('pages.applicant_profile.tabs_content.edit_applicant', $data);
     }
@@ -319,6 +349,87 @@ class ApplicantController extends Controller
 
     }
 
+     /*******************
+     * Applicant Family
+     *******************/
+
+     /**
+     * Load new applicant Family modal body
+     */
+    public function showNewAppFamily()
+    {
+        $data['relationship'] = Common::getRelationship();
+
+        return view('pages.applicant_profile.modals.content.new_app_family', $data);
+    }
+
+    /**
+     * Load edit applicant contact modal body
+     */
+    public function showEditAppFamily($famID)
+    {
+        $data['relationship'] = Common::getRelationship();
+        $data['details'] = Applicant::getAppFamily([0,$famID]);
+
+        return view('pages.applicant_profile.modals.content.edit_app_family', $data);
+    }
+
+    /**
+     * Save applicant contact
+     */
+    public function saveAppFamily(Request $request)
+    {
+        // dd($request);
+        $param = [
+            $request->appID,
+            $request->new_fam_first_name,
+            $request->new_fam_middle_name,
+            $request->new_fam_last_name,
+            $request->new_fam_bdate,
+            $request->new_fam_relationship,
+            $request->new_fam_nationality,
+            $request->new_family_deceased,
+            $request->new_family_dependent,
+            base64_decode(Session::get('Emp_Id'))
+        ];
+
+        $res = Applicant::insertAppFamily($param);
+
+        $num = $res[0]->RETURN;
+        $msg = $res[0]->Message;
+
+        $result = array('num' => $num, 'msg' => $msg);
+        return $result;
+    }
+
+    /**
+     * Update applicant family
+     */
+    public function updateAppfamily(Request $request)
+    {
+        $param = [
+            $request->famID,
+            $request->edit_fam_first_name,
+            $request->edit_fam_middle_name,
+            $request->edit_fam_last_name,
+            $request->edit_fam_bdate,
+            $request->edit_fam_relationship,
+            $request->edit_fam_nationality,
+            $request->edit_family_deceased,
+            $request->edit_family_dependent,
+            base64_decode(Session::get('Emp_Id'))
+        ];
+
+        // dd($param);
+        $update = Applicant::updateAppFamily($param);
+
+        $num = $update[0]->RETURN;
+        $msg = $update[0]->Message;
+        $result = array('num' => $num, 'msg' => $msg);
+        return $result;
+
+    }
+
     /******************
      * Applicant School
      ******************/
@@ -395,6 +506,7 @@ class ApplicantController extends Controller
         $data['yrfrom'] = $request->edit_educ_year_from;
         $data['yrto']   = $request->edit_educ_year_to;
 
+
         $update = Applicant::updateAppEducation($data);
 
         $num = $update[0]->RETURN;
@@ -443,16 +555,29 @@ class ApplicantController extends Controller
      */
     public function saveAppExperience (Request $request)
     {
+        $fromDate = explode("-", $request -> new_exp_month_from);
+        $toDate = explode("-", $request -> new_exp_month_to);
+
+        $yrFrom = $fromDate[0];
+        $monthFrom = $fromDate[1];
+        $dayFrom = $fromDate[2];
+        $yrTo = $toDate[0];
+        $monthTo = $toDate[1];
+        $dayTo = $toDate[2];
+
         $data['appID']     = $request->appID;
         $data['employer']  = $request->new_employer;
         $data['emptype']   = $request->new_emptype;
         $data['address']   = $request->new_address;
         $data['position']  = $request->new_position;
-        $data['monthfrom'] = $request->new_exp_month_from;
-        $data['yearfrom']  = $request->new_exp_year_from;
-        $data['monthto']   = $request->new_exp_month_to;
-        $data['yearto']    = $request->new_exp_year_to;
+        $data['monthfrom'] = $monthFrom;
+        $data['yearfrom']  = $yrFrom;
+        $data['monthto']   = $monthTo;
+        $data['yearto']    = $yrTo;
+        $data['dayFrom']   = $dayFrom;
+        $data['dayTo']     = $dayTo;
 
+        // dd($data);
         $add = Applicant::insertAppExperience($data);
 
         $num = $add[0]->RETURN;
@@ -472,16 +597,28 @@ class ApplicantController extends Controller
      */
     public function updateAppExperience (Request $request)
     {
+        $fromDate = explode("-", $request -> edit_exp_month_from);
+        $toDate = explode("-", $request -> edit_exp_month_to);
+
+        $yrFrom = $fromDate[0];
+        $monthFrom = $fromDate[1];
+        $dayFrom = $fromDate[2];
+        $yrTo = $toDate[0];
+        $monthTo = $toDate[1];
+        $dayTo = $toDate[2];
+
         $data['expID']     = $request->experience_ID;
         $data['appID']     = $request->appID;
         $data['employer']  = $request->edit_employer;
         $data['emptype']   = $request->edit_emptype;
         $data['address']   = $request->edit_employer_address;
         $data['position']  = $request->edit_position;
-        $data['monthfrom'] = $request->edit_exp_month_from;
-        $data['yearfrom']  = $request->edit_exp_year_from;
-        $data['monthto']   = $request->edit_exp_month_to;
-        $data['yearto']    = $request->edit_exp_year_to;
+        $data['monthfrom'] = $monthFrom;
+        $data['yearfrom']  = $yrFrom;
+        $data['monthto']   = $monthTo;
+        $data['yearto']    = $yrTo;
+        $data['dayFrom']   = $dayFrom;
+        $data['dayTo']     = $dayTo;
 
         $add = Applicant::updateAppExperience($data);
 
@@ -690,7 +827,9 @@ class ApplicantController extends Controller
             $request->edit_emp_dateend,
             $request->app_afh_date,
             $request->app_ob_date,
-            $request->edit_emp_PRF
+            $request->edit_emp_PRF,
+            $request->edit_emp_bank_name,
+            $request->edit_emp_bank_code,
         );
 
         if($request->edit_employmentID != '') :
@@ -759,4 +898,17 @@ class ApplicantController extends Controller
         return $result;
     }
 
+    /**
+     * Update applicant First Job? Yes or No
+     */
+    public function updateFirstJob(Request $request)
+    {
+        $param = [
+            $request->ApplicantID,
+            $request->FirstJob
+        ];
+
+        return Applicant::updateFirstJob($param);
+
+    }
 }

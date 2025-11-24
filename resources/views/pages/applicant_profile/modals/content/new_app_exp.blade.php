@@ -41,51 +41,21 @@
             </div>
         </div>
     </div>
-    <label for="new_exp_month_from">Start date</label>
     <div class="row align-items-baseline">
         <div class="col-md-6">
             <div class="form-group">
-                <select name="new_exp_month_from" id="new_exp_month_from" data-placeholder="Month" class="form-control exp-select2">
-                    <option></option>
-                    @foreach ($month as $mt)
-                    <option value="{{ $mt->Month_ID }}">{{ $mt->Month }}</option>
-                    @endforeach
-                </select>
+                <label for="new_exp_month_from">Start date</label>
+                <input id="new_exp_month_from" name="new_exp_month_from" type="text" class="form-control flatpickr" placeholder="From">
+                <label class="invalid-feedback" id="new_educ_year_error"></label>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <select name="new_exp_year_from" id="new_exp_year_from" data-placeholder="Year" class="form-control exp-select2">
-                    <option></option>
-                    @foreach ($year as $yr)
-                    <option value="{{ $yr->Year }}">{{ $yr->Year }}</option>
-                    @endforeach
-                </select>
+                <label for="new_exp_month_to">End date</label>
+                <input id="new_exp_month_to" name="new_exp_month_to" type="text" class="form-control flatpickr" placeholder="To">
+                <label class="invalid-feedback" id="new_educ_year_error"></label>
             </div>
         </div>
     </div>
-    <label for="new_exp_month_to">End date</label>
-    <div class="row align-items-baseline">
-        <div class="col-md-6">
-            <div class="form-group">
-                <select name="new_exp_month_to" id="new_exp_month_to" data-placeholder="Month" class="form-control exp-select2">
-                    <option></option>
-                    @foreach ($month as $mt)
-                    <option value="{{ $mt->Month_ID }}">{{ $mt->Month }}</option>
-                    @endforeach
-                </select>
-                <label class="invalid-feedback" id="new_exp_date_error"></label>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <select name="new_exp_year_to" id="new_exp_year_to" data-placeholder="Year" class="form-control exp-select2">
-                    <option></option>
-                    @foreach ($year as $yr)
-                    <option value="{{ $yr->Year }}">{{ $yr->Year }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    </div>
+
 </form>

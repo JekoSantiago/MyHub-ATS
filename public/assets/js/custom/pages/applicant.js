@@ -1,5 +1,6 @@
 $(function () {
 
+
     var tblApplicants = $('#tbl_applicants').DataTable({
         autoWidth: true,
         serverSide: true,
@@ -50,7 +51,7 @@ $(function () {
         columns: [
             {
                 render: function (data, type, row, meta) {
-                    
+
                     return  ' <a href="' + WebURL + '/applicants/' + row.Applicant_ID + '" class="action-icon text-primary"><i class="mdi mdi-eye"></i></a> ';
                 },
                 className: 'text-center',
@@ -89,15 +90,15 @@ $(function () {
 
     /* Filter applicants modal apply button */
     $('body').on('click', '#btn_filter_applicants', function () {
-        
+
         $('#modal_filter_applicants').modal('hide');
         tblApplicants.draw();
         // tblApplicants.ajax.reload();
-    }); 
+    });
 
     /* Reset filter inputs in filter applicants modal button */
     $('body').on('click', '#btn_filter_app_reset', function () {
-        
+
         $('#filter_fname').val('');
         $('#filter_mname').val('');
         $('#filter_lname').val('');
@@ -105,10 +106,12 @@ $(function () {
         $('#filter_address').val('');
         $('.filter-flatpickr').flatpickr({
             mode: 'range',
-            dateFormat: 'Y-m-d'
+            dateFormat: 'Y-m-d',
+            allowInput: true,
+
         }).clear();
 
-    }); 
+    });
 
     /* Filter applicants modal */
     $('#modal_filter_applicants').on('show.bs.modal', function (e) {
@@ -138,9 +141,18 @@ $(function () {
             $('#new_sss').mask('00-0000000-0');
             $('#new_hdmf').mask('0000-0000-0000');
             $('#new_philhealth').mask('0000-0000-0000');
+            $('#new_height').mask("0'00");
+            $('#new_emergency_contact').mask('0000-000-0000');
+
+            var currentDate = new Date();
+            var maxDate = new Date(currentDate);
+                maxDate.setDate(currentDate.getDate() - 1);
 
             $('.flatpickr').flatpickr({
-                dateFormat: 'Y-m-d'
+                dateFormat: 'Y-m-d',
+                allowInput: true,
+                maxDate: maxDate
+
             });
 
             $('.select2').select2();
@@ -270,7 +282,7 @@ $(function () {
             cache: false,
             success: function (data) {
                 $('#new_municipal').html(data);
-                $('#edit_barangay').html('<option></option>');
+                $('#new_barangay').html('<option></option>');
             },
             error: function () {
                 console.log('error');
@@ -325,6 +337,130 @@ $(function () {
         var sss = $('#new_sss').val().replaceAll('-', '');
         var hdmf = $('#new_hdmf').val().replaceAll('-', '');
         var philhealth = $('#new_philhealth').val().replaceAll('-', '');
+        var nickname = $('#new_nick_name').val();
+        var maiden = $('#new_maiden_name').val();
+        var blood = $('#new_blood').val();
+        var weight = $('#new_weight').val();
+        var height = $('#new_height').val();
+        var expat = $('#new_expat').val();
+        var emergencyname = $('#new_emergency_name').val();
+        var emergencycontact = $('#new_emergency_contact').val();
+        var relationship = $('#new_emergency_relationship').val();
+        var bzip = $('#new_bzip').val();
+        var zip = $('#new_zip').val();
+
+        if (bzip.length <= 0)
+        {
+            var error = true;
+            $('#new_bzip').addClass('error-input');
+            $('#new_bzip_error').show();
+        }
+        else {
+            $('#new_bzip').removeClass('error-input');
+            $('#new_bzip_error').hide();
+        }
+
+        if (zip.length <= 0)
+        {
+            var error = true;
+            $('#new_zip').addClass('error-input');
+            $('#new_zip_error').show();
+        }
+        else {
+            $('#new_zip').removeClass('error-input');
+            $('#new_zip_error').hide();
+        }
+
+        if (relationship == '') {
+            var error = true;
+            $('#new_emergency_relationship').addClass('error-input');
+            $('#new_emergency_relationship_error').show();
+        }
+        else {
+            $('#new_emergency_relationship').removeClass('error-input');
+            $('#new_emergency_relationship_error').hide();
+        }
+
+        if (emergencycontact.length < 11) {
+            var error = true;
+            $('#new_emergency_contact').addClass('error-input');
+            $('#new_emergency_contact_error').show();
+        }
+        else {
+            $('#new_emergency_contact').removeClass('error-input');
+            $('#new_emergency_contact_error').hide();
+        }
+
+
+        if (emergencyname.length == 0) {
+            var error = true;
+            $('#new_emergency_name').addClass('error-input');
+            $('#new_emergency_name_error').show();
+        }
+        else {
+            $('#new_emergency_name').removeClass('error-input');
+            $('#new_emergency_name_error').hide();
+        }
+
+        if (nickname.length == 0) {
+            var error = true;
+            $('#new_nick_name').addClass('error-input');
+            $('#new_nick_name_error').show();
+        }
+        else {
+            $('#new_nick_name').removeClass('error-input');
+            $('#new_nick_name_error').hide();
+        }
+
+        if (maiden.length == 0) {
+            var error = true;
+            $('#new_maiden_name').addClass('error-input');
+            $('#new_maiden_name_error').show();
+        }
+        else {
+            $('#new_maiden_name').removeClass('error-input');
+            $('#new_maiden_name_error').hide();
+        }
+
+        // if (blood <= 0) {
+        //     var error = true;
+        //     $('#new_blood').addClass('error-input');
+        //     $('#new_blood_error').show();
+        // }
+        // else {
+        //     $('#new_blood').removeClass('error-input');
+        //     $('#new_blood_error').hide();
+        // }
+
+        // if (weight <= 0) {
+        //     var error = true;
+        //     $('#new_weight').addClass('error-input');
+        //     $('#new_weight_error').show();
+        // }
+        // else {
+        //     $('#new_weight').removeClass('error-input');
+        //     $('#new_weight_error').hide();
+        // }
+
+        // if (height.length == 0) {
+        //     var error = true;
+        //     $('#new_height').addClass('error-input');
+        //     $('#new_height_error').show();
+        // }
+        // else {
+        //     $('#new_height').removeClass('error-input');
+        //     $('#new_height_error').hide();
+        // }
+
+        if (expat.length ==0) {
+            var error = true;
+            $('#new_expat').addClass('error-input');
+            $('#new_expat_error').show();
+        }
+        else {
+            $('#new_expat').removeClass('error-input');
+            $('#new_expat_error').hide();
+        }
 
         if (dateapplied.length == 0) {
             var error = true;
@@ -582,6 +718,8 @@ $(function () {
             $('#new_philhealth').removeClass('error-input');
             $('#new_philhlength_error').hide();
         }
+
+
 
         if (error == false) {
             $('#new_taxcode').removeAttr('disabled');

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Myhelper;
 
 class Applicant extends Model
 {
@@ -54,7 +55,7 @@ class Applicant extends Model
     {
         array_push($data, base64_decode(Session::get('Emp_Id')));
 
-        $addApp = DB::connection('dbATS')->select('EXEC sp_Applicant_Insert ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', $data);
+        $addApp = DB::connection('dbATS')->select('EXEC sp_Applicant_Insert  ' . Myhelper::generateQM($data), $data);
         return $addApp;
     }
 
@@ -65,7 +66,7 @@ class Applicant extends Model
     {
         array_push($data, base64_decode(Session::get('Emp_Id')));
 
-        $updApp = DB::connection('dbATS')->select('EXEC sp_Applicant_Update ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', $data);
+        $updApp = DB::connection('dbATS')->select('EXEC sp_Applicant_Update  ' . Myhelper::generateQM($data), $data);
         return $updApp;
     }
 
@@ -214,9 +215,11 @@ class Applicant extends Model
         $yrFrom   = $data['yearfrom'];
         $moTo     = $data['monthto'];
         $yrTo     = $data['yearto'];
+        $dayFrom  = $data['dayTo'];
+        $dayTo    = $data['dayFrom'];
         $empID    = base64_decode(Session::get('Emp_Id'));
 
-        $addExp = DB::connection('dbATS')->select('EXEC sp_PrevWork_Insert ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [$appID, $employer, $emptype, $add, $pos, $moFrom, $yrFrom, $moTo, $yrTo, $empID]);
+        $addExp = DB::connection('dbATS')->select('EXEC sp_PrevWork_Insert ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [$appID, $employer, $emptype, $add, $pos, $moFrom, $yrFrom, $moTo, $yrTo, $dayFrom, $dayTo, $empID]);
         return $addExp;
     }
 
@@ -235,9 +238,11 @@ class Applicant extends Model
         $yrFrom   = $data['yearfrom'];
         $moTo     = $data['monthto'];
         $yrTo     = $data['yearto'];
+        $dayFrom  = $data['dayTo'];
+        $dayTo    = $data['dayFrom'];
         $empID    = base64_decode(Session::get('Emp_Id'));
 
-        $updtExp = DB::connection('dbATS')->select('sp_PrevWork_Update ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?',[$expID, $appID, $employer, $emptype, $add, $pos, $moFrom, $yrFrom, $moTo, $yrTo, $empID]);
+        $updtExp = DB::connection('dbATS')->select('sp_PrevWork_Update ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?',[$expID, $appID, $employer, $emptype, $add, $pos, $moFrom, $yrFrom, $moTo, $yrTo, $dayFrom, $dayTo, $empID]);
         return $updtExp;
     }
 
@@ -316,7 +321,7 @@ class Applicant extends Model
     {
         array_push($data, base64_decode(Session::get('Emp_Id')));
 
-        $saveEmp = DB::connection('dbATS')->select('EXEC sp_Hire_Insert ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', $data);
+        $saveEmp = DB::connection('dbATS')->select('EXEC sp_Hire_Insert ' . Myhelper::generateQM($data), $data);
         return $saveEmp;
     }
 
@@ -327,7 +332,7 @@ class Applicant extends Model
     {
         array_push($data, base64_decode(Session::get('Emp_Id')));
 
-        $updtEmp = DB::connection('dbATS')->select('EXEC sp_Hire_Update ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', $data);
+        $updtEmp = DB::connection('dbATS')->select('EXEC sp_Hire_Update ' . Myhelper::generateQM($data) , $data);
         return $updtEmp;
     }
 
@@ -352,6 +357,46 @@ class Applicant extends Model
         $updtEmp = DB::connection('dbATS')->select('EXEC sp_HireDeploy_Update ?, ?, ?', [$employmentID, 1, $empID]);
         return $updtEmp;
     }
+
+
+    /**********************
+     * Applicant Family
+     **********************/
+
+    /**
+     * Get applicant family list
+     */
+    public static function getAppFamily($data)
+    {
+        return DB::connection('dbATS')->select('sp_ApplicantFamily_Get ' . Myhelper::generateQM($data), $data);
+    }
+
+    /**
+     * Insert Applicant Family
+     */
+    public static function insertAppFamily($data)
+    {
+        return DB::connection('dbATS')->select('sp_ApplicantFamily_Insert ' . Myhelper::generateQM($data), $data);
+    }
+
+    /**
+     * Update Applicant Family
+     */
+    public static function updateAppFamily($data)
+    {
+        return DB::connection('dbATS')->select('sp_ApplicantFamily_Update ' . Myhelper::generateQM($data), $data);
+
+    }
+
+    /**
+     * Update First Job
+     */
+    public static function updateFirstJob($data)
+    {
+        return DB::connection('dbATS')->select('sp_FirstJob_Update ' . Myhelper::generateQM($data), $data);
+    }
+
+
 
 }
 
